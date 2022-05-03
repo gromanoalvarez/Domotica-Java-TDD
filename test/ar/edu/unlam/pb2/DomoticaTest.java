@@ -97,11 +97,53 @@ public class DomoticaTest {
 	
 	@Test
 	public void queSePuedanCrearEmpleadosYClientes() {
-		Persona uno =new Empleado("javier");
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Persona uno =new Empleado("javier", edificioInteligente.getPiso(2));
 		Persona dos =new Cliente("micaela");
 		
 		assertNotNull(uno);
 		assertNotNull(dos);
+	}
+	
+	@Test
+	public void queAlEdificioPuedanIngresarPersonasConIdentificacionEstablecida() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Persona uno =new Empleado("javier",edificioInteligente.getPiso(2));
+		Persona dos =new Cliente("micaela");
+		Persona tres =new Cliente("coral");
+		final Integer CANTIDAD_PERSONAS_ESPERADAS=2;
+		
+		uno.establecerIdentificacion("token 1234");
+		edificioInteligente.ingresarPersonas(uno);
+		dos.establecerIdentificacion("token 000");
+		edificioInteligente.ingresarPersonas(dos);
+		//El siguiente sin identificacion no ingresa
+		edificioInteligente.ingresarPersonas(tres);
+
+		assertEquals(CANTIDAD_PERSONAS_ESPERADAS, (Integer)edificioInteligente.personas.size());
+		assertEquals(CANTIDAD_PERSONAS_ESPERADAS, edificioInteligente.getcantidadDePersonasDentro());
+	}
+	
+	@Test
+	public void queDelEdificioPuedanSalirLasPersonas() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Persona uno =new Empleado("javier",edificioInteligente.getPiso(2));
+		Persona dos =new Cliente("micaela");
+		Persona tres =new Cliente("coral");
+		final Integer CANTIDAD_PERSONAS_ESPERADAS=1;
+		
+		uno.establecerIdentificacion("token 1234");
+		edificioInteligente.ingresarPersonas(uno);
+		dos.establecerIdentificacion("token 000");
+		edificioInteligente.ingresarPersonas(dos);
+		tres.establecerIdentificacion("cori");
+		edificioInteligente.ingresarPersonas(tres);
+		
+		edificioInteligente.retiroDePersona(uno);
+		edificioInteligente.retiroDePersona(dos);
+
+		assertEquals(CANTIDAD_PERSONAS_ESPERADAS, (Integer)edificioInteligente.personas.size());
+		assertEquals(CANTIDAD_PERSONAS_ESPERADAS, edificioInteligente.getcantidadDePersonasDentro());
 	}
 
 }
