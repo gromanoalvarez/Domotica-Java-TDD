@@ -3,7 +3,6 @@
  */
 package ar.edu.unlam.pb2;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -94,6 +93,15 @@ public class DomoticaTest {
 			assertFalse(nuevoAscensor.saberSiElAscensorPuedePararEnElPisoIndicado(edificioInteligente.getPiso(2)));
 			assertTrue(nuevoAscensor.saberSiElAscensorPuedePararEnElPisoIndicado(edificioInteligente.getPiso(3)));
 			assertFalse(nuevoAscensor.saberSiElAscensorPuedePararEnElPisoIndicado(edificioInteligente.getPiso(4)));
+	}
+	
+	@Test
+	public void queSePuedanCrearEmpleadosYClientes() {
+		Persona uno =new Empleado("javier");
+		Persona dos =new Cliente("micaela");
+		
+		assertNotNull(uno);
+		assertNotNull(dos);
 	}
 
 }
