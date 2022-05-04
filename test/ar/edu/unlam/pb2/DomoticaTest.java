@@ -213,12 +213,38 @@ public class DomoticaTest {
 	
 	@Test
 	public void queElEmpleadoFicheCuandoIngresaASuPisoCorrespondiente() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		nuevoAscensor.establecerParadas("impar");
+		Piso pisoAsignadoAMartina = edificioInteligente.getPiso(3);
+		Empleado martina =new Empleado("martina", pisoAsignadoAMartina);
+		martina.establecerIdentificacion("atencion al cliente");
+		assertTrue(edificioInteligente.ingresarPersonas(martina));
+		assertTrue(nuevoAscensor.viajarPorAscensor(martina, pisoAsignadoAMartina));
+		assertTrue(martina.ficharEntradaAlPisoAsignadoParaTrabajo());
 		
+		//que si esta en otro piso fuera de su sector asignado no pueda fichar
+		Piso otroPisoImpar = edificioInteligente.getPiso(1);
+		assertTrue(nuevoAscensor.viajarPorAscensor(martina, otroPisoImpar));
+		assertFalse(martina.ficharEntradaAlPisoAsignadoParaTrabajo());
 	}
 	
 	@Test
 	public void queElEmpleadoFicheSalidaEnSuPisoCorrespondiente() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		nuevoAscensor.establecerParadas("impar");
+		Piso pisoAsignadoAMartina = edificioInteligente.getPiso(3);
+		Empleado martina =new Empleado("martina", pisoAsignadoAMartina);
+		martina.establecerIdentificacion("atencion al cliente");
+		assertTrue(edificioInteligente.ingresarPersonas(martina));
+		assertTrue(nuevoAscensor.viajarPorAscensor(martina, pisoAsignadoAMartina));
+		assertTrue(martina.ficharSalidaAlPisoAsignadoParaTrabajo());
 		
+		//que si esta en otro piso fuera de su sector asignado no pueda fichar
+		Piso otroPisoImpar = edificioInteligente.getPiso(1);
+		assertTrue(nuevoAscensor.viajarPorAscensor(martina, otroPisoImpar));
+		assertFalse(martina.ficharSalidaAlPisoAsignadoParaTrabajo());
 	}
 
 }

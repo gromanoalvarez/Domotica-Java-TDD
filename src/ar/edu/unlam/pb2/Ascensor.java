@@ -72,4 +72,13 @@ public class Ascensor {
 			}
 		}return false;
 	}
+	
+	public Boolean viajarPorAscensor(Persona persona, Piso piso) {
+		if(ingresarPersonaAlAscensor(persona) && saberSiElAscensorPuedePararEnElPisoIndicado(piso)) {
+			if(persona instanceof Empleado) ((Empleado) persona).setPisoDondeEstaRealmente(piso);
+			sacarPersonaDelAscensor(persona);
+			return true;
+		}
+		else return false;
+	}
 }

@@ -85,7 +85,7 @@ public class EdificioInteligente {
 			personas.add(persona);
 			cantidadDePersonasDentro++;
 			persona.setIngresoAlEdificio(true);
-			//debo guardar la hora de entrada del cliente
+			if(persona instanceof Empleado) ((Empleado) persona).setPisoDondeEstaRealmente(pisos[0]);
 			return true;
 		}return false;
 	}
@@ -97,15 +97,6 @@ public class EdificioInteligente {
 		//debo guardar la hora de salida del cliente
 	}
 	
-	public void tomarElAscensor(Persona persona, Ascensor ascensor, Piso pisoDeseado) {
-		//restringir que la cantidad de personas o de peso no exceda el limite del ascensor
-		//debo setear el pisoDeseado que se guarde en el pisoRealOcupado
-	}
-	
-	public void fichajeDelEmpleado(Persona empleado, Piso pisoAsignado) {
-		//para que el empleado fiche entrada y salida 
-		//pisoRealOcupado  == pisoAsignado
-	}
 	
 	//crear lista de todos los empleados
 	//crear metodo que permita saber los ausentes en el dia
