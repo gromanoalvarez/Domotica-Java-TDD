@@ -16,7 +16,7 @@ public class EdificioInteligente {
 	private Piso pisos[];
 	private Integer cantidadDePisos, cantidadDeAscensores, cantidadDePersonasDentro;
 	
-	List<Persona> personas = new ArrayList<>();
+	List<Persona> personas = new ArrayList<Persona>();
 
 	public EdificioInteligente(String direccion, Integer cantidadDePisos) {
 		this.direccion=direccion;

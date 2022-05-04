@@ -145,5 +145,80 @@ public class DomoticaTest {
 		assertEquals(CANTIDAD_PERSONAS_ESPERADAS, (Integer)edificioInteligente.personas.size());
 		assertEquals(CANTIDAD_PERSONAS_ESPERADAS, edificioInteligente.getcantidadDePersonasDentro());
 	}
+	
+	@Test
+	public void queUnaPersonaQueIngresoAlEdificioPuedaTomarUnAscensor() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		Persona tres =new Cliente("coral");
+		
+		//para que la persona tome el ascensor primero debe estar dentro del edificio
+		tres.establecerIdentificacion("vengo a hacer reclamo");
+		edificioInteligente.ingresarPersonas(tres);
+
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+	}
+	
+	@Test
+	public void queUnaPersonaQueIngresoAlEdificioPuedaTomarUnAscensorSinPasarLasCapacidadesDelMismo() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		Persona tres =new Cliente("coral");
+		
+		//para que la persona tome el ascensor primero debe estar dentro del edificio
+		tres.establecerIdentificacion("vengo a hacer reclamo");
+		edificioInteligente.ingresarPersonas(tres);
+		
+		//que respete capacidad de personas=4
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+		assertFalse(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+
+		Ascensor nuevoAscensor2= edificioInteligente.crearAscensor();
+
+		tres.setPeso(150.0);
+		//que respete pesoMaximo=500.0kg
+		assertTrue(nuevoAscensor2.ingresarPersonaAlAscensor(tres));
+		assertTrue(nuevoAscensor2.ingresarPersonaAlAscensor(tres));
+		assertTrue(nuevoAscensor2.ingresarPersonaAlAscensor(tres));
+		assertFalse(nuevoAscensor2.ingresarPersonaAlAscensor(tres));		
+	}
+	
+	@Test
+	public void queLaPersonaAlBajarDelAscensorSeActualicenLasCapacidadesDelMismo() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		Persona tres =new Cliente("coral");
+		Persona dos =new Cliente("micaela");
+		final Integer PERSONAS_ESPERADAS_DENTRO=1;
+		final Double PESO_ESPERADO_DENTRO=100.0;
+
+		
+		//para que la persona tome el ascensor primero debe estar dentro del edificio
+		tres.establecerIdentificacion("vengo a hacer reclamo");
+		edificioInteligente.ingresarPersonas(tres);
+		dos.establecerIdentificacion("vengo a hacer reclamo");
+		edificioInteligente.ingresarPersonas(dos);
+		
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(tres));
+		assertTrue(nuevoAscensor.ingresarPersonaAlAscensor(dos));
+		assertTrue(nuevoAscensor.sacarPersonaDelAscensor(dos));		
+		//Que  baje la cantidad de personas
+		assertEquals(PERSONAS_ESPERADAS_DENTRO, nuevoAscensor.cantidadDePersonasIngresadas);
+		//Que baje el peso acumulado
+		assertEquals(PESO_ESPERADO_DENTRO, nuevoAscensor.pesoAcumulado);
+	}
+	
+	@Test
+	public void queElEmpleadoFicheCuandoIngresaASuPisoCorrespondiente() {
+		
+	}
+	
+	@Test
+	public void queElEmpleadoFicheSalidaEnSuPisoCorrespondiente() {
+		
+	}
 
 }

@@ -2,14 +2,18 @@ package ar.edu.unlam.pb2;
 
 public class Ascensor {
 	
-	protected Double capacidadDeCargaPorPeso;
-	protected Integer capacidadDeCargaPorPersonas;
+	protected Double capacidadDeCargaPorPeso, pesoAcumulado;
+	protected Integer capacidadDeCargaPorPersonas, cantidadDePersonasIngresadas;
 	protected String pisosAParar;
+	protected Persona personasDentro[];
 	
 	public Ascensor() {
-		capacidadDeCargaPorPeso=1000.0;
-		capacidadDeCargaPorPersonas=10;
+		capacidadDeCargaPorPeso=500.0;
+		capacidadDeCargaPorPersonas=4;
 		pisosAParar="todos";
+		cantidadDePersonasIngresadas=0;
+		personasDentro= new Persona[capacidadDeCargaPorPersonas];
+		pesoAcumulado=0.0;
 	}
 
 	public Double getcapacidadDeCargaPorPeso() {
@@ -41,5 +45,31 @@ public class Ascensor {
 			if(pisosAParar.equals("impar") && pisoDeseado.getPar().equals(false)) return true;	
 		}
 		return false;
+	}
+	
+	public Boolean ingresarPersonaAlAscensor(Persona persona) {
+		if(persona.getIngresoAlEdificio() &&  cantidadDePersonasIngresadas < capacidadDeCargaPorPersonas && (pesoAcumulado + persona.getPeso()) <= capacidadDeCargaPorPeso) {
+			for (int i = 0; i < personasDentro.length; i++) {
+				if(personasDentro[i]==null) {
+					personasDentro[i]=persona;
+					cantidadDePersonasIngresadas++;
+					pesoAcumulado+=persona.getPeso();
+					return true;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public Boolean sacarPersonaDelAscensor(Persona persona) {
+		for (int i = 0; i < personasDentro.length; i++) {
+			if(personasDentro[i].equals(persona)) {
+				personasDentro[i]=null;
+				cantidadDePersonasIngresadas--;
+				pesoAcumulado-=persona.getPeso();
+				return true;
+			}
+		}return false;
 	}
 }
