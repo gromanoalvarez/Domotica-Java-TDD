@@ -1,11 +1,15 @@
 package ar.edu.unlam.pb2;
 
+import java.time.LocalTime;
+
 public class Empleado extends Persona{
 	
 	private String huellaDactilar;
 	private Piso pisoAsignado;
 	private Piso pisoDondeEstaRealmente;
 	private Double tiempoFichado;
+	private LocalTime horaEntrada, horaSalida;
+	long horasTrabajadasEnElDia;
 
 	public Empleado(String nombre,Piso pisoAsignado) {
 		super(nombre);
@@ -42,13 +46,26 @@ public class Empleado extends Persona{
 
 	public Boolean ficharEntradaAlPisoAsignadoParaTrabajo() {
 		if(pisoAsignado.equals(pisoDondeEstaRealmente)) {
+			horaEntrada = LocalTime.now();
+			horaEntrada = LocalTime.parse("10:15:00");
 			return true;
 		}
 		else return false;
 	}
 
 	public Boolean ficharSalidaAlPisoAsignadoParaTrabajo() {
-		if(pisoAsignado.equals(pisoDondeEstaRealmente)) return true;
+		if(pisoAsignado.equals(pisoDondeEstaRealmente)) {
+			horaSalida = LocalTime.now();
+			horaSalida = LocalTime.parse("17:15:00");
+			return true;
+		}
 		else return false;
 	}
+	
+	public String getTotalDeTiempoFichadoEnEldia(){
+		 Integer horas=horaSalida.getHour() - horaEntrada.getHour();
+		 Integer minutos=horaSalida.getMinute() - horaEntrada.getMinute();
+		 return "El empleado ha trabajado "+horas+" horas y "+minutos+" minutos.";
+	}
+	
 }
