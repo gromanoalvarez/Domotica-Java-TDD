@@ -249,8 +249,8 @@ public class DomoticaTest {
 		assertFalse(martina.ficharSalidaAlPisoAsignadoParaTrabajo());
 	}
 	
-	@Test
-	public void queSePuedaConocerElTiempoTrabajadoAlDia() {
+	@Test // CONSIGNA A)
+	public void queSePuedaConocerElTiempoTrabajadoAlDiaDeUnEmpleado() {
 		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
 		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
 		nuevoAscensor.establecerParadas("impar");
@@ -263,11 +263,87 @@ public class DomoticaTest {
 		assertTrue(nuevoAscensor.viajarPorAscensor(martina, pisoAsignadoAMartina));
 		assertTrue(martina.ficharEntradaAlPisoAsignadoParaTrabajo());
 		assertTrue(martina.ficharSalidaAlPisoAsignadoParaTrabajo());
-		assertEquals(TIEMPO_ESPERADO, martina.getTotalDeTiempoFichadoEnEldia());
-		
-		
+		assertEquals(TIEMPO_ESPERADO, martina.getTotalDeTiempoFichadoEnEldia());		
 	}
 	
+	@Test // CONSIGNA B)
+	public void queSePuedaConocerTasaDeEsperaDeAtencionDelClienteEnElEdificio() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		Piso pisoDeGarantias = edificioInteligente.getPiso(2);
+		nuevoAscensor.establecerParadas("par");
+		Cliente cesar =new Cliente("cesar");
+		cesar.establecerIdentificacion("reclamo de garantia");
+		final String TASA_DE_ESPERA= "El Cliente ha tenido una tasa de espera de 1 horas y 15 minutos.";
+		
+		assertTrue(edificioInteligente.ingresarPersonas(cesar));
+		assertTrue(nuevoAscensor.viajarPorAscensor(cesar,pisoDeGarantias));
+		edificioInteligente.retiroDePersona(cesar);
+		assertEquals(TASA_DE_ESPERA, cesar.promedioQueUnClienteSeEncuentraEnElEdificio());
+	}
 	
+	@Test
+	public void queElEdificioPuedaAgregarUnNuevoEmpleadoASuLista() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Piso pisoDeGarantias = edificioInteligente.getPiso(2);
+		Piso pisoDeAsesoramiento = edificioInteligente.getPiso(1);
+		Piso pisoDeJefes = edificioInteligente.getPiso(3);
+
+		edificioInteligente.nuevoEmpleado("daniel", pisoDeGarantias);
+		edificioInteligente.nuevoEmpleado("ludmila", pisoDeGarantias);
+		edificioInteligente.nuevoEmpleado("viviana", pisoDeAsesoramiento);
+		edificioInteligente.nuevoEmpleado("martha", pisoDeJefes);
+		edificioInteligente.nuevoEmpleado("alexis", pisoDeAsesoramiento);
+		edificioInteligente.nuevoEmpleado("pedro", pisoDeJefes);
+		
+		final Integer TOTAL_EMPLEADOS = 6;
+		assertEquals(TOTAL_EMPLEADOS, (Integer)edificioInteligente.totalDeEmpleados.size());
+	}
+
+	@Test
+	public void listadoDePresentes() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Piso pisoDeGarantias = edificioInteligente.getPiso(2);
+		Piso pisoDeAsesoramiento = edificioInteligente.getPiso(1);
+		Piso pisoDeJefes = edificioInteligente.getPiso(3);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+
+
+		Empleado daniel = edificioInteligente.nuevoEmpleado("daniel", pisoDeGarantias);
+		Empleado martha =edificioInteligente.nuevoEmpleado("martha", pisoDeJefes);
+		
+		//Hacer que solamente uno vaya al edificio a fichar el presente:
+		final Integer TOTAL_EMPLEADOS_PRESENTES = 1; 
+		martha.establecerIdentificacion("jefa");
+		edificioInteligente.ingresarPersonas(martha);
+		
+		assertEquals(TOTAL_EMPLEADOS_PRESENTES, (Integer)edificioInteligente.presentes.size());
+	}
+	
+	@Test
+	public void listadoDeAusentes() {
+		EdificioInteligente edificioInteligente = new EdificioInteligente("Bouchard 459", 5);
+		Piso pisoDeGarantias = edificioInteligente.getPiso(2);
+		Piso pisoDeAsesoramiento = edificioInteligente.getPiso(1);
+		Piso pisoDeJefes = edificioInteligente.getPiso(3);
+		Ascensor nuevoAscensor= edificioInteligente.crearAscensor();
+		final Integer TOTAL_EMPLEADOS = 3;
+		final Integer TOTAL_EMPLEADOS_PRESENTES = 1; 
+		final Integer TOTAL_EMPLEADOS_AUSENTES = 2; 
+
+		Empleado daniel = edificioInteligente.nuevoEmpleado("daniel", pisoDeGarantias);
+		Empleado martha = edificioInteligente.nuevoEmpleado("martha", pisoDeJefes);
+		Empleado viviana =edificioInteligente.nuevoEmpleado("viviana", pisoDeAsesoramiento);
+
+		
+		//Hacer que solamente uno vaya al edificio a fichar el presente:
+		martha.establecerIdentificacion("jefa");
+		edificioInteligente.ingresarPersonas(martha);
+		edificioInteligente.calcularEmpleadosAusentes();
+		
+		assertEquals(TOTAL_EMPLEADOS, (Integer)edificioInteligente.totalDeEmpleados.size());
+		assertEquals(TOTAL_EMPLEADOS_PRESENTES, (Integer)edificioInteligente.presentes.size());
+		assertEquals(TOTAL_EMPLEADOS_AUSENTES, (Integer)edificioInteligente.ausentes.size());		
+	}
 
 }

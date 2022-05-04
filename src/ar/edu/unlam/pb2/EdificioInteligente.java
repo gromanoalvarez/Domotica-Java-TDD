@@ -17,6 +17,10 @@ public class EdificioInteligente {
 	private Integer cantidadDePisos, cantidadDeAscensores, cantidadDePersonasDentro;
 	
 	List<Persona> personas = new ArrayList<Persona>();
+	List<Empleado> totalDeEmpleados = new ArrayList<Empleado>();
+	List<Empleado> presentes = new ArrayList<Empleado>();
+	 List<Empleado> ausentes = new ArrayList<Empleado>();
+
 
 	public EdificioInteligente(String direccion, Integer cantidadDePisos) {
 		this.direccion=direccion;
@@ -85,19 +89,42 @@ public class EdificioInteligente {
 			personas.add(persona);
 			cantidadDePersonasDentro++;
 			persona.setIngresoAlEdificio(true);
-			if(persona instanceof Empleado) ((Empleado) persona).setPisoDondeEstaRealmente(pisos[0]);
+			if(persona instanceof Empleado) {
+				((Empleado) persona).setPisoDondeEstaRealmente(pisos[0]);
+				presentes.add((Empleado) persona);
+			}
+			if(persona instanceof Cliente)((Cliente) persona).ficharEntradaAlEdificio();
 			return true;
 		}return false;
 	}
 
 	public void retiroDePersona(Persona persona) {
+		if(persona instanceof Cliente)((Cliente) persona).ficharSalidaDelEdificio();
 		personas.remove(persona);
 		cantidadDePersonasDentro--;
 		persona.setIngresoAlEdificio(false);
-		//debo guardar la hora de salida del cliente
+	}
+
+	public Empleado nuevoEmpleado(String nombre, Piso pisoAsignadoParaTrabajar) {
+		Empleado nuevo = new Empleado(nombre, pisoAsignadoParaTrabajar);
+		totalDeEmpleados.add(nuevo);
+		return nuevo;
 	}
 	
+	public List<Empleado> mostrarPresentes() {
+		return presentes;
+	}
 	
-	//crear lista de todos los empleados
-	//crear metodo que permita saber los ausentes en el dia
+	public void calcularEmpleadosAusentes() {
+		for (Empleado empleado: totalDeEmpleados) {
+			if(!presentes.contains(empleado)) {
+				ausentes.add(empleado);
+			}
+		}
+	}
+
+	public List<Empleado> mostrarEmpleadosTotales() {
+		return totalDeEmpleados;
+	}
+
 }

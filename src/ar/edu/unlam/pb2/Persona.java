@@ -38,6 +38,11 @@ public abstract class Persona {
 	public void setPeso(Double peso) {
 		this.peso = peso;
 	}
+
+	@Override
+	public String toString() {
+		return "Persona [nombre=" + nombre + ", peso=" + peso + "]";
+	}
 	
 	
 

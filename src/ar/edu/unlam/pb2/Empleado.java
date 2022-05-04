@@ -7,10 +7,9 @@ public class Empleado extends Persona{
 	private String huellaDactilar;
 	private Piso pisoAsignado;
 	private Piso pisoDondeEstaRealmente;
-	private Double tiempoFichado;
 	private LocalTime horaEntrada, horaSalida;
 	long horasTrabajadasEnElDia;
-
+	
 	public Empleado(String nombre,Piso pisoAsignado) {
 		super(nombre);
 		huellaDactilar="";
@@ -67,5 +66,12 @@ public class Empleado extends Persona{
 		 Integer minutos=horaSalida.getMinute() - horaEntrada.getMinute();
 		 return "El empleado ha trabajado "+horas+" horas y "+minutos+" minutos.";
 	}
+
+	@Override
+	public String toString() {
+		return "Empleado "+ getNombre() +" [huellaDactilar=" + huellaDactilar + ", pisoAsignado=" + pisoAsignado + "] \n";
+	}
 	
+	
+
 }

@@ -26,4 +26,9 @@ public class Piso {
 		return esPar;
 	}
 
+	@Override
+	public String toString() {
+		return "Piso [esAreaDeServicio=" + esAreaDeServicio + ", esPar=" + esPar + "]";
+	}
+
 }
